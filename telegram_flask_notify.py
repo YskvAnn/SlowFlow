@@ -40,7 +40,8 @@ def notify():
 
 if __name__ == "__main__":
     # Запускаем Flask в отдельном потоке
-    threading.Thread(target=lambda: app.run(port=5001), daemon=True).start()
+    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=5001), daemon=True).start()
+    print("Flask сервер запущен. Ожидаю уведомлений...")
 
     # Запускаем Telegram бота в основном потоке
     print("Бот запущен. Жду /start...")

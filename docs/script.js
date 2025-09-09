@@ -38,7 +38,7 @@ function updateDisplay() {
 
 // ---------- Отправка уведомления на Flask ----------
 function sendTelegramNotification(message) {
-    fetch("http://127.0.0.1:5001/notify", {  // порт должен совпадать с Flask
+    fetch("https://c875eb190f6a.ngrok-free.app/notify", {  // публичный ngrok URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
