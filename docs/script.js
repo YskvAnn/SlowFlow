@@ -43,7 +43,18 @@ function switchButtons() {
     }
 }
 
-// 4. Функция запуска таймера
+// 4. Функция для отправки уведомлений в Telegram
+function sendTelegramNotification(text) {
+    fetch("http://127.0.0.1:5000/notify", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
+    }).catch(err => console.error("Ошибка уведомления:", err));
+}
+
+// 5. Функция запуска таймера
 function startTimer() {
     clearInterval(timerInterval);
 
@@ -52,24 +63,25 @@ function startTimer() {
             updateDisplay();
             time--;
         } else {
-            // Когда дошли до 0 — переключаем режим
             const activeTab = document.querySelector('.tab.active')?.textContent || "Pomodoro";
 
             if (isWork) {
                 isWork = false;
                 time = modes[activeTab].break;
+                sendTelegramNotification("Рабочий таймер завершён! Время отдыха 🧘");
             } else {
                 isWork = true;
                 time = modes[activeTab].work;
+                sendTelegramNotification("Отдых закончился! Возвращаемся к работе 🚀");
             }
 
             updateDisplay();
-            switchButtons(); // переключаем подсветку кнопок
+            switchButtons();
         }
     }, 1000);
 }
 
-// 5. Обработчики вкладок
+// 6. Обработчики вкладок
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -84,9 +96,9 @@ document.querySelectorAll('.tab').forEach(tab => {
     });
 });
 
-// 6. Обработчики кнопок
+// 7. Обработчики кнопок
 startBtn.addEventListener('click', startTimer);
 
-// 7. Инициализация дисплея
+// 8. Инициализация дисплея
 updateDisplay();
 switchButtons();
