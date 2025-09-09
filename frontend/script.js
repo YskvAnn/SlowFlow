@@ -1,6 +1,6 @@
 // ---------- Настройка режимов ----------
 const modes = {
-    "Pomodoro": { work: 5*1, break: 1*5 },
+    "Pomodoro": { work: 5*60, break: 5*60 },  // тестовые короткие таймеры
     "Свой": { work: 30*60, break: 10*60 },
     "40/15": { work: 40*60, break: 15*60 },
     "52/17": { work: 52*60, break: 17*60 },
@@ -27,13 +27,18 @@ function updateDisplay() {
         ? "radial-gradient(circle, rgba(255,0,0,0.4), rgba(255,0,0,0) 70%)"
         : "radial-gradient(circle, rgba(0,128,0,0.4), rgba(0,128,0,0) 70%)";
 
-    workBtn.classList.toggle("active", isWork);
-    breakBtn.classList.toggle("active", !isWork);
+    if (isWork) {
+        workBtn.classList.add("active");
+        breakBtn.classList.remove("active");
+    } else {
+        workBtn.classList.remove("active");
+        breakBtn.classList.add("active");
+    }
 }
 
-// ---------- Уведомления ----------
+// ---------- Отправка уведомления ----------
 function sendTelegramNotification(message) {
-    fetch("https://76152e07f087.ngrok-free.app", {
+    fetch("https://ВАШ_NGROK_URL/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
@@ -49,29 +54,27 @@ function startTimer() {
             updateDisplay();
         } else {
             clearInterval(interval);
-
             const activeTab = document.querySelector(".tab.active")?.textContent || "Pomodoro";
 
             if (isWork) {
-                // ✅ Рабочий таймер завершён
+                console.log("Рабочий таймер завершён!");
                 sendTelegramNotification("Рабочий таймер завершён! Время отдыха 🧘");
                 isWork = false;
                 timer = modes[activeTab].break;
                 updateDisplay();
-                startTimer(); // автоматически запускаем таймер отдыха
+                startTimer(); // запускаем таймер отдыха автоматически
             } else {
-                // ✅ Таймер отдыха завершён
+                console.log("Отдых завершён!");
                 sendTelegramNotification("Отдых завершён! Возвращаемся к работе 🚀");
                 isWork = true;
                 timer = modes[activeTab].work;
                 updateDisplay();
-                // таймер дальше не стартует автоматически
             }
         }
     }, 1000);
 }
 
-// ---------- Вкладки ----------
+// ---------- Обработчики ----------
 tabs.forEach(tab => {
     tab.addEventListener("click", () => {
         tabs.forEach(t => t.classList.remove("active"));
@@ -85,7 +88,6 @@ tabs.forEach(tab => {
     });
 });
 
-// ---------- Кнопки ----------
 workBtn.addEventListener("click", startTimer);
 breakBtn.addEventListener("click", () => {
     const activeTab = document.querySelector(".tab.active")?.textContent || "Pomodoro";
