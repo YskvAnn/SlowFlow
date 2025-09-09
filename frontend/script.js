@@ -33,7 +33,7 @@ function updateDisplay() {
 
 // ---------- Уведомления ----------
 function sendTelegramNotification(message) {
-    fetch("https://17de0da7b13a.ngrok-free.app", {
+    fetch("https://76152e07f087.ngrok-free.app", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
