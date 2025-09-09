@@ -1,104 +1,107 @@
-// 1. Настройка режимов и начальных переменных
+// ---------- Настройка режимов ----------
 const modes = {
-    "Pomodoro": { work: 5, break: 3 },   // для теста короткие таймеры
-    "Свой": { work: 4, break: 2 },
-    "40/15": { work: 6, break: 3 },
-    "52/17": { work: 5, break: 2 },
-    "90/20": { work: 7, break: 3 },
+    "Pomodoro": { work: 25*60, break: 5*60 },
+    "Свой": { work: 30*60, break: 10*60 },
+    "40/15": { work: 40*60, break: 15*60 },
+    "52/17": { work: 52*60, break: 17*60 },
+    "90/20": { work: 90*60, break: 20*60 },
 };
 
-let time = 5; // стартовое время таймера
-let timerInterval;
-let isWork = true; // true — рабочий таймер, false — отдых
+let timer = modes["Pomodoro"].work; // стартовый таймер
+let isWork = true; // true — работа, false — отдых
+let interval;
 
-const timeDisplay = document.querySelector('.time');
-const startBtn = document.querySelector('.control-btn.active');
+// ---------- Элементы ----------
+const timeDisplay = document.querySelector(".time");
+const workBtn = document.querySelector(".control-btn:nth-child(1)");
+const breakBtn = document.querySelector(".control-btn:nth-child(2)");
+const tabs = document.querySelectorAll(".tab");
 
-// 2. Функция обновления дисплея
+// ---------- Обновление дисплея и кнопок ----------
 function updateDisplay() {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+    timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+    document.querySelector(".timer").style.background = isWork
+        ? "radial-gradient(circle, rgba(255,0,0,0.4), rgba(255,0,0,0) 70%)"
+        : "radial-gradient(circle, rgba(0,128,0,0.4), rgba(0,128,0,0) 70%)";
 
     if (isWork) {
-        document.querySelector('.timer').style.background =
-            "radial-gradient(circle, rgba(255,0,0,0.4), rgba(255,0,0,0) 70%)";
+        workBtn.classList.add("active");
+        breakBtn.classList.remove("active");
     } else {
-        document.querySelector('.timer').style.background =
-            "radial-gradient(circle, rgba(0,128,0,0.4), rgba(0,128,0,0) 70%)";
+        workBtn.classList.remove("active");
+        breakBtn.classList.add("active");
     }
 }
 
-// 3. Переключение подсветки кнопок
-function switchButtons() {
-    const workBtn = document.querySelector('.control-btn:nth-child(1)');
-    const breakBtn = document.querySelector('.control-btn:nth-child(2)');
-
-    if (isWork) {
-        workBtn.classList.add('active');
-        breakBtn.classList.remove('active');
-    } else {
-        breakBtn.classList.add('active');
-        workBtn.classList.remove('active');
-    }
-}
-
-// 4. Функция для отправки уведомлений через Flask сервер
-function sendTelegramNotification(text) {
-    fetch("http://127.0.0.1:5000/notify", {
+// ---------- Отправка уведомления на Flask ----------
+function sendTelegramNotification(message) {
+    fetch("http://127.0.0.1:5001/notify", {  // порт должен совпадать с Flask
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: text })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
     }).catch(err => console.error("Ошибка уведомления:", err));
 }
 
-// 5. Функция запуска таймера
+// ---------- Запуск таймера ----------
 function startTimer() {
-    clearInterval(timerInterval);
-
-    timerInterval = setInterval(() => {
-        if (time > 0) {
+    clearInterval(interval);
+    interval = setInterval(() => {
+        if (timer > 0) {
+            timer--;
             updateDisplay();
-            time--;
         } else {
-            const activeTab = document.querySelector('.tab.active')?.textContent || "Pomodoro";
+            clearInterval(interval);
+
+            const activeTab = document.querySelector(".tab.active")?.textContent || "Pomodoro";
 
             if (isWork) {
-                isWork = false;
-                time = modes[activeTab].break;
+                // 1️⃣ Уведомление о завершении работы
                 sendTelegramNotification("Рабочий таймер завершён! Время отдыха 🧘");
-            } else {
-                isWork = true;
-                time = modes[activeTab].work;
-                sendTelegramNotification("Отдых закончился! Возвращаемся к работе 🚀");
-            }
 
-            updateDisplay();
-            switchButtons();
+                // 2️⃣ Переключаем на отдых и запускаем таймер
+                isWork = false;
+                timer = modes[activeTab].break;
+                updateDisplay();
+                startTimer(); // запуск таймера отдыха
+            } else {
+                // 3️⃣ Уведомление о завершении отдыха
+                sendTelegramNotification("Отдых завершён! Возвращаемся к работе 🚀");
+
+                // 4️⃣ Переключаем на работу, но таймер не запускаем автоматически
+                isWork = true;
+                timer = modes[activeTab].work;
+                updateDisplay();
+            }
         }
     }, 1000);
 }
 
-// 6. Обработчики вкладок
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+// ---------- Обработчики вкладок ----------
+tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
 
         const selectedMode = tab.textContent;
-        time = modes[selectedMode].work;
+        timer = modes[selectedMode].work;
         isWork = true;
-        clearInterval(timerInterval);
+        clearInterval(interval);
         updateDisplay();
-        switchButtons();
     });
 });
 
-// 7. Обработчики кнопок
-startBtn.addEventListener('click', startTimer);
+// ---------- Обработчики кнопок ----------
+workBtn.addEventListener("click", startTimer);
+breakBtn.addEventListener("click", () => {
+    const activeTab = document.querySelector(".tab.active")?.textContent || "Pomodoro";
+    timer = modes[activeTab].break;
+    isWork = false;
+    updateDisplay();
+    startTimer();
+});
 
-// 8. Инициализация дисплея
+// ---------- Инициализация ----------
 updateDisplay();
-switchButtons();
