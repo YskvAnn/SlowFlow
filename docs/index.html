@@ -93,23 +93,27 @@
       text-align: center;
     }
 
+    /* Контролы */
     .controls {
       display: flex;
-      justify-content: center;
       gap: 12px;
       margin: 1.5rem 1rem;
       width: 100%;
     }
 
     .control-btn {
-      flex: 1;
-      padding: 14px 0;
-      border-radius: 16px;
+      flex: 1; /* каждая кнопка занимает равную ширину */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px; /* расстояние между иконкой и текстом */
+      padding: 16px 0; /* высота кнопки */
+      border-radius: 20px;
       border: 1px solid #fdd;
       background: #fff;
       color: #d33;
-      text-align: center;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -159,8 +163,8 @@
         font-size: 48px;
       }
       .control-btn {
-        font-size: 12px;
-        padding: 10px 0;
+        font-size: 14px;
+        padding: 12px 0;
       }
       .tabs .tab {
         padding: 6px 12px;
@@ -177,13 +181,14 @@
   </header>
 
   <section class="greeting">
-    <h2>Привет, Анюткins</h2>
+    <h2>Привет, Анюткинс</h2>
     <p>5 сентября, пятница</p>
   </section>
 
   <div class="tabs">
     <div class="tab">Pomodoro</div>
     <div class="tab">Свой</div>
+    <div class="tab">40/15</div>
     <div class="tab">52/17</div>
     <div class="tab">90/20</div>
   </div>
@@ -193,8 +198,8 @@
   </div>
 
   <div class="controls">
-    <div class="control-btn active">25 минут</div>
-    <div class="control-btn">5 минут</div>
+    <button class="control-btn active">🐇 25 минут</button>
+    <button class="control-btn">🐢 5 минут</button>
   </div>
 
   <nav>
