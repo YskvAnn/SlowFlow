@@ -5,7 +5,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Создаем кнопку Web App с объектом WebAppInfo
     keyboard = [
-        [InlineKeyboardButton("Открыть Web App", web_app=WebAppInfo(url="https://www.youtube.com/watch?v=jVKlZd5LMBs"))]
+        [InlineKeyboardButton("Открыть Web App", web_app=WebAppInfo(url="https://yskvann.github.io/SlowFlow/"))]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
