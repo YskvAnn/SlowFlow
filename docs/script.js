@@ -1,13 +1,13 @@
 // 1. Настройка режимов и начальных переменных
 const modes = {
-    "Pomodoro": { work: 25*60, break: 5*60 },
-    "Свой": { work: 30*60, break: 10*60 },
-    "40/15": { work: 40*60, break: 15*60 },
-    "52/17": { work: 52*60, break: 17*60 },
-    "90/20": { work: 90*60, break: 20*60 },
+    "Pomodoro": { work: 5, break: 3 },   // для теста короткие таймеры
+    "Свой": { work: 4, break: 2 },
+    "40/15": { work: 6, break: 3 },
+    "52/17": { work: 5, break: 2 },
+    "90/20": { work: 7, break: 3 },
 };
 
-let time = 3 * 1; // стартовое время таймера
+let time = 5; // стартовое время таймера
 let timerInterval;
 let isWork = true; // true — рабочий таймер, false — отдых
 
@@ -43,7 +43,7 @@ function switchButtons() {
     }
 }
 
-// 4. Функция для отправки уведомлений в Telegram
+// 4. Функция для отправки уведомлений через Flask сервер
 function sendTelegramNotification(text) {
     fetch("http://127.0.0.1:5000/notify", {
         method: "POST",
