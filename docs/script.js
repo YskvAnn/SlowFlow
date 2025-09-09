@@ -1,6 +1,6 @@
 // ---------- Настройка режимов ----------
 const modes = {
-    "Pomodoro": { work: 25*60, break: 5*60 },
+    "Pomodoro": { work: 5*1, break: 5*1 },
     "Свой": { work: 30*60, break: 10*60 },
     "40/15": { work: 40*60, break: 15*60 },
     "52/17": { work: 52*60, break: 17*60 },
