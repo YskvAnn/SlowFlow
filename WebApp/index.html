@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Timer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #fff9f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 1rem;
+      font-size: 14px;
+    }
+
+    .greeting {
+      text-align: left;
+      width: 100%;
+      padding: 0 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 1rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 6px 14px;
+      border-radius: 16px;
+      background: #ffeaea;
+      color: #d33;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .timer {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,0,0.4), rgba(255,0,0,0) 70%);
+      margin: 2rem auto;
+    }
+
+    .time {
+      font-size: 56px;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(255,0,0,0.6);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+
+    .control-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid #fdd;
+      background: #fff;
+      color: #d33;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .control-btn.active {
+      background: #ff5a5a;
+      color: #fff;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      background: #fff9f9;
+      border-top: 1px solid #eee;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #d33;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button>← Назад</button>
+    <button>⋮</button>
+  </header>
+
+  <section class="greeting">
+    <h2>Привет, Анюткins</h2>
+    <p>5 сентября, пятница</p>
+  </section>
+
+  <div class="tabs">
+    <div class="tab">Pomodoro</div>
+    <div class="tab">Свой</div>
+    <div class="tab">52/17</div>
+    <div class="tab">90/20</div>
+  </div>
+
+  <div class="timer">
+    <div class="time">25:00</div>
+  </div>
+
+  <div class="controls">
+    <div class="control-btn active">25 минут</div>
+    <div class="control-btn">5 минут</div>
+  </div>
+
+  <nav>
+    <button>🌱</button>
+    <button>⏰</button>
+    <button>❤️</button>
+  </nav>
+
+</body>
+</html>
