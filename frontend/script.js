@@ -38,12 +38,13 @@ function updateDisplay() {
 
 // ---------- Отправка уведомления ----------
 function sendTelegramNotification(message) {
-    fetch("https://ВАШ_NGROK_URL/notify", {
+    fetch("https://9aa26e6a295a.ngrok-free.app/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
     }).catch(err => console.error("Ошибка уведомления:", err));
 }
+
 
 // ---------- Таймер ----------
 function startTimer() {

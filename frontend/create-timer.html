@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новый таймер</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:#fff9f9;
+      color:#333;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      padding-bottom:70px;
+    }
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:1rem;
+    }
+    header button {
+      background:none;
+      border:none;
+      font-size:16px;
+      cursor:pointer;
+    }
+    form {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      padding:0 1rem;
+    }
+    input, textarea {
+      width:100%;
+      padding:12px;
+      border:1px solid #eee;
+      border-radius:12px;
+      font-size:14px;
+      outline:none;
+      transition:0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color:#ff5a5a;
+      box-shadow:0 0 4px rgba(255,90,90,0.3);
+    }
+    label {
+      font-size:14px;
+      margin-bottom:4px;
+      display:block;
+    }
+    .time-options {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .time-btn {
+      flex:1;
+      min-width:60px;
+      text-align:center;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid #fdd;
+      background:#fff;
+      color:#d33;
+      font-size:14px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .time-btn:hover {
+      background:#ffeaea;
+    }
+    .time-btn.active {
+      background:#ff5a5a;
+      color:#fff;
+      border-color:#ff5a5a;
+    }
+    .switch {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:14px;
+    }
+    .save-btn {
+      margin:1rem 0;
+      padding:14px;
+      border:none;
+      border-radius:20px;
+      background:#ff5a5a;
+      color:#fff;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .save-btn:hover {
+      background:#e04a4a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button>← Назад</button>
+    <button>⋮</button>
+  </header>
+
+  <form>
+    <div>
+      <label for="title">Введите название</label>
+      <input id="title" type="text" placeholder="Название таймера">
+    </div>
+    <div>
+      <label for="desc">Введите описание</label>
+      <textarea id="desc" rows="3" placeholder="Описание..."></textarea>
+    </div>
+    <div>
+      <label>Время работы</label>
+      <div class="time-options" id="work-time">
+        <button type="button" class="time-btn active">20 мин</button>
+        <button type="button" class="time-btn">25 мин</button>
+        <button type="button" class="time-btn">30 мин</button>
+        <button type="button" class="time-btn">40 мин</button>
+        <button type="button" class="time-btn">45 мин</button>
+        <button type="button" class="time-btn">50 мин</button>
+      </div>
+    </div>
+    <div>
+      <label>Время отдыха</label>
+      <div class="time-options" id="rest-time">
+        <button type="button" class="time-btn active">2 мин</button>
+        <button type="button" class="time-btn">5 мин</button>
+        <button type="button" class="time-btn">8 мин</button>
+        <button type="button" class="time-btn">10 мин</button>
+        <button type="button" class="time-btn">15 мин</button>
+        <button type="button" class="time-btn">20 мин</button>
+      </div>
+    </div>
+    <div class="switch">
+      <label for="push">Включить пуш-уведомления</label>
+      <input id="push" type="checkbox">
+    </div>
+    <button type="submit" class="save-btn">Сохранить таймер</button>
+  </form>
+
+  <script>
+    // Функция переключения активной кнопки
+    function setupTimeButtons(containerId) {
+      const container = document.getElementById(containerId);
+      const buttons = container.querySelectorAll(".time-btn");
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+    }
+
+    // Применяем для двух блоков
+    setupTimeButtons("work-time");
+    setupTimeButtons("rest-time");
+  </script>
+</body>
+</html>

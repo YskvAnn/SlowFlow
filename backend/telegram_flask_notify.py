@@ -3,7 +3,7 @@ from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import asyncio
 
-TOKEN = "ВАШ_ТОКЕН_БОТА"
+TOKEN = "8293900584:AAGnknhlDJzhXo8ZqjwPlZS9irtPBJUm1ZI"
 bot = Bot(token=TOKEN)
 app = Flask(__name__)
 
@@ -46,6 +46,7 @@ def notify():
     return {"status": "ok"}
 
 if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001)
     print("Flask сервер запущен на 5001. Жду уведомлений...")
     print("Бот запущен. Жду /start...")
     application.run_polling()
